@@ -76,3 +76,21 @@ $("search").addEventListener("submit", async (e) => {
 });
 
 loadWeather(DEFAULT);
+
+// Theme switcher: light, dark, or system (follows the OS setting)
+function applyTheme(theme) {
+  if (theme === "system") delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme = theme;
+  document.querySelectorAll("#theme button").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.theme === theme);
+  });
+  try { localStorage.setItem("theme", theme); } catch (e) {}
+}
+
+document.querySelectorAll("#theme button").forEach((btn) => {
+  btn.addEventListener("click", () => applyTheme(btn.dataset.theme));
+});
+
+let savedTheme = "system";
+try { savedTheme = localStorage.getItem("theme") || "system"; } catch (e) {}
+applyTheme(savedTheme);
